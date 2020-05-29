@@ -1,0 +1,52 @@
+Tema 2 - SD - Seria CC - Game Tree
+Digori Parascovia - 313CC
+
+
+Task1: Implementarea arborelui de joc al jocului Connect-4
+Cu functia read_table citesc datele din fisierul de intrare rows, cols, player si matricea. 
+Matricea e citita linie cu linie cu fgets iar apoi din string extrag caracterele diferite 
+de ' ' si le adaug in tabela nodului root.
+Functia principala a taskului este create_Tree in care se construieste tot arborele de joc. 
+Deoarece dupa jocul connect-4 original jucatorul alege o coloana pe care pune bila si apoi 
+bila cade pe cel mai de jos rand neocupat, am decis sa fac o parcurgere pe coloane apoi pe 
+randuri, astfel pe coloane merg de la 0->cols-1 (cols e nr de coloane) si pe randuri merg 
+de la rows-1 -> 0 (rows e nr de randuri). Ca conditie de validare a pozitiei am vazut ca 
+e necesar ca pozitia neocupata de sa fie current_node->table[j][i] == '-' dar succesorul lui 
+pe coloana sa fie deja ocupat, astfel ma asigur ca pozitia data e ultima din coloana neocupata. 
+Cazul particular al acestei conditii am gasit a fi ca daca pe ultimul rand din tabela sunt '-' 
+atunci acea pozitie by default devine potrivita pentru mutare. Odata ce am gasit pozitia aloc 
+un nod nou, copii tabela nodului curent in nodul nou creat, inserez caracterul jucatorului 
+si adaug acel nod in lisa de copii a nodului curent. Dupa adaugare verific daca configuratia 
+din nodul nou creat dupa pozitionare nu este una castigatoare cu functiile de check in toate 
+directiile(orizontala, verticala, diagonala stanga jos, diagonala dreapta jos). Daca jocul 
+nu e terminat apelez recursiv functia dinnou in care noul nod deja ia pozitia de current_node 
+si incrementez si level(ce arata ce nivel are nodul in arbore- nr de taburi); 
+La final eliberez memoria din tot arborele.
+
+Task2: Aplicarea algoritmului minimax pe un arbore de joc in care cunoastem nodurile terminale.
+In acest task mi s-a parut cel mai complicat citirea si creare arborelui de joc. Mai intaii de 
+toate am citit valoarea rootulul. Pentru citire am folosit o structura de coada auxiliara in 
+care am pus pe rand nodurile din parantezele rotunde(), incepand cu rootul ca current_node. 
+Cu un while citesc caracter cu caracter tot fisierul, caracterelele dintre () le transform 
+in int-ul nr (numarul de copii al nodului curent si valoare sa), alloc un nod nou cu valoare 
+nr si incrementez nr de copii al nodului curent. Adaug nodul nou in lista de copii a nodului 
+curent, si in coada la final. Pe masura ce citesc noduri daca numarul de copii al nodului 
+curent devine egal cu valoare sa inseamna ca nodul curent trebuie schimbat cu urmatorul din 
+coada astfel incat urmatoarele noduri citite sa devina copii acestui nou curent. Nodurile 
+cu [] -frunze nu se adauga in coada. Functia minimax verifica daca nodul curent este maximizer 
+sau minimizer si in dependenta de asta returneaza fie valoare maxima sau minima dintre lista 
+de copii a nodului curent. Printarea arborelui minimax este recursiva, parcurg lista de noduri 
+in adancime si printez nodurile in dependenta de nivelul lor cu acelasi numar de taburi.
+La final eliberez memoria din tot arborele.
+
+Task3: Aplicare algoritmului Alpha-Beta Prunning
+In acest task am folosit functiile de citire/creare si printare a arborelui de la taskul 2. 
+In algoritmul prunning am verificat daca nodul curent e nod terminal -> returnez valoare sa 
+si il semnez vizitat. Parcug toate nodurile in adancime. Verific ce tip de jucator am 
+minimizer/maximizer, pentru fiecare jucator parcurg lista de copii a lui current_node si 
+depistez valoare optima de minim sau maxim. Nodurile parcurse se vor considera vizitate si 
+de accea node->visited = 1. Acum trebuie sa elimin nodurile nevizitate din arbore. 
+Cu functia free_subtree si free_2 sterg toate listele de copii care sunt egale cu 0 si 
+reiese ca parintii lor egali cu 0 devin frunze. Deaceea cu functiia free_zero _leafs si 
+delete_zero_from_list sterg si ultimii nevizitati = 0 care sunt ramasi ca frunze. 
+La final eliberez memoria din tot arborele.
